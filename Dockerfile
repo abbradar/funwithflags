@@ -34,8 +34,13 @@ RUN echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-releas
 RUN useradd -m -g users app
 WORKDIR /home/app
 
-# Set up application
+# Update dotnet cache.
 USER app
+WORKDIR /tmp
+RUN dotnet new
+
+# Set up application
+WORKDIR /home/app
 COPY . /home/app
 RUN dotnet restore && dotnet build
 USER root

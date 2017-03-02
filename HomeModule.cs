@@ -6,7 +6,11 @@ namespace funwithflags
     {
         public HomeModule()
         {
-            Get("/", _ => "Hello World");
+            Get("/", _ => "Hello Foo");
+            Get("/products/{id}", _ =>
+            {
+                return "Hello Bar";
+            });
         }
     }
 }

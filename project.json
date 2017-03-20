@@ -4,6 +4,7 @@
         "debugType": "portable",
         "emitEntryPoint": true
     },
+    "compileBuiltIn": "src/**/*.cs",
 
     "frameworks": {
         "netcoreapp1.0": {

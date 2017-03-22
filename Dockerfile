@@ -53,6 +53,5 @@ RUN set -e; \
   gosu postgres pg_ctl stop
 
 EXPOSE 5000
-VOLUME /var/log/supervisor
 VOLUME /srv/postgresql
 CMD [ "supervisord" ]

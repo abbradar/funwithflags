@@ -42,6 +42,7 @@ RUN dotnet new
 # Set up application
 WORKDIR /home/app
 COPY . /home/app
+# RUN git clean -ffdx
 RUN dotnet restore && dotnet build
 USER root
 RUN set -e; \
@@ -54,5 +55,4 @@ RUN set -e; \
 EXPOSE 5000
 VOLUME /var/log/supervisor
 VOLUME /srv/postgresql
-RUN echo '{ "server.urls": "http://0.0.0.0:5000" }' > hosting.json
 CMD [ "supervisord" ]

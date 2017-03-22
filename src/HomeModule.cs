@@ -4,7 +4,7 @@ namespace funwithflags
 
     public class HomeModule : NancyModule
     {
-        public HomeModule()
+        public HomeModule(DatabaseContext database)
         {
             Get("/", _ => "Hello Foo");
             Get("/products/{id}", _ =>

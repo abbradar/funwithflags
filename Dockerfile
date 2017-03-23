@@ -8,8 +8,7 @@ RUN apt-get update \
 ENV LANG en_US.utf8
 
 # Install supervisord
-RUN apt-get -y install supervisor \
-  && mkdir -p /var/log/supervisor
+RUN apt-get -y install supervisor
 
 # Install PostgreSQL
 ENV PG_MAJOR 9.6

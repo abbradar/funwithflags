@@ -8,6 +8,9 @@ namespace funwithflags
     using Nancy.Configuration;
     using Autofac;
 
+    /// <summary>
+    /// Returns current working directory as the root path for views.
+    /// </summary>
     public class CustomRootPathProvider : IRootPathProvider
     {
         public string GetRootPath()
@@ -16,23 +19,19 @@ namespace funwithflags
         }
     }
     
+    /// <summary>
+    /// Sets various aspects of how Nancy behaves.
+    /// </summary>
     public class CustomBootstrapper : AutofacNancyBootstrapper
     {
         private DbContextOptions<DatabaseContext> dbContextOptions;
         
-        // We get configuration from Startup class.
         public CustomBootstrapper(IConfiguration configuration)
         {
             // Build database connection options.
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>()
                 .UseNpgsql(configuration["database"]);
             this.dbContextOptions = optionsBuilder.Options;
-        }
-
-        protected override IRootPathProvider RootPathProvider
-        {
-            // Return current directory as root.
-            get { return new CustomRootPathProvider(); }
         }
 
         public override void Configure(INancyEnvironment environment)
@@ -42,15 +41,23 @@ namespace funwithflags
             // Enable verbose error reporting.
             environment.Tracing(enabled: false, displayErrorTraces: true);
         }
-        
-        // Called on each new request; registers needed objects.
+
+        protected override IRootPathProvider RootPathProvider
+        {
+            get { return new CustomRootPathProvider(); }
+        }
+
+        /// <summary>
+        /// Called on each new request; registers objects that are provided to modules per request.
+        /// </summary>
         protected override void ConfigureRequestContainer(ILifetimeScope container, NancyContext context)
         {
             base.ConfigureRequestContainer(container, context);
 
-            // Create new database context and make it available.
             var builder = new ContainerBuilder();
 
+            // Provide database context if needed.
+            // Disposable objects must be registered as single instances to ensure cleanup.
             builder.Register(c => new DatabaseContext(this.dbContextOptions)).As<DatabaseContext>().SingleInstance();
 
             builder.Update(container.ComponentRegistry);

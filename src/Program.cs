@@ -19,7 +19,7 @@ namespace funwithflags
                 .Build();
 
             var nancyOptions = new NancyOptions();
-            // Bootstrapper registers global resources for Nancy.
+            // Boostrapper handles a lot of Nancy configuration.
             nancyOptions.Bootstrapper = new CustomBootstrapper(config);
 
             var host = new WebHostBuilder()

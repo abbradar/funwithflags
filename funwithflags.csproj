@@ -6,13 +6,8 @@
     <AssemblyName>funwithflags</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>funwithflags</PackageId>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="src\**\*.cs" />
-  </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="1.1.1" />

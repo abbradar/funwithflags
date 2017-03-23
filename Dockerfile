@@ -65,4 +65,4 @@ RUN set -e; \
 
 EXPOSE 5000
 VOLUME /srv/postgresql
-CMD [ "supervisord" ]
+CMD supervisord -c /home/app/supervisord.conf

@@ -4,9 +4,9 @@ namespace funwithflags
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Nancy;
-    using Nancy.Bootstrapper;
-    using Nancy.TinyIoc;
+    using Nancy.Bootstrappers.Autofac;
     using Nancy.Configuration;
+    using Autofac;
 
     public class CustomRootPathProvider : IRootPathProvider
     {
@@ -16,7 +16,7 @@ namespace funwithflags
         }
     }
     
-    public class CustomBootstrapper : DefaultNancyBootstrapper
+    public class CustomBootstrapper : AutofacNancyBootstrapper
     {
         private DbContextOptions<DatabaseContext> dbContextOptions;
         
@@ -44,12 +44,16 @@ namespace funwithflags
         }
         
         // Called on each new request; registers needed objects.
-        protected override void ConfigureRequestContainer(TinyIoCContainer container, NancyContext context)
+        protected override void ConfigureRequestContainer(ILifetimeScope container, NancyContext context)
         {
             base.ConfigureRequestContainer(container, context);
 
             // Create new database context and make it available.
-            container.Register<DatabaseContext>().UsingConstructor(() => new DatabaseContext(this.dbContextOptions)).AsSingleton();
+            var builder = new ContainerBuilder();
+
+            builder.Register(c => new DatabaseContext(this.dbContextOptions)).As<DatabaseContext>().SingleInstance();
+
+            builder.Update(container.ComponentRegistry);
         }
     }
 }

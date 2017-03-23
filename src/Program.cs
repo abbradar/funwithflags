@@ -25,7 +25,6 @@ namespace funwithflags
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseConfiguration(config)
-                .UseContentRoot(Directory.GetCurrentDirectory())
                 .Configure(app => app.UseOwin(pl => pl.UseNancy(nancyOptions)))
                 .Build();
 

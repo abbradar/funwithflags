@@ -1,0 +1,10 @@
+@Master['Master']
+
+@Section['Title']
+    Hello!
+@EndSection
+
+@Section['Content']
+    <p>Hello, Foo!</p>
+    <p>Tests count: @ViewBag.Count.</p>
+@EndSection

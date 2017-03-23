@@ -9,8 +9,8 @@ namespace funwithflags
         {
             Get("/", _ =>
                 {
-                    var count = database.Tests.Count();
-                    return $"Hello! Test count: {count}";
+                    ViewBag.Count = database.Tests.Count();
+                    return View["Index"];
                 });
             Get("/products/{id}", _ =>
             {

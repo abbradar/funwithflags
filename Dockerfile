@@ -24,6 +24,7 @@ USER postgres
 RUN initdb
 # FIXME: Npgsql.EntityFrameworkcore.PostgreSQL has not yet been updated to support UNIX sockets.
 # RUN sed -i 's/trust/ident/g' "$PGDATA/pg_hba.conf"
+ENV DATABASE Host=127.0.0.1;Username=app
 USER root
 
 # Install .NET Core
@@ -35,6 +36,12 @@ RUN echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-releas
 # Create user
 RUN useradd -m -g users app
 WORKDIR /home/app
+RUN set -e; \
+  gosu postgres pg_ctl start; \
+  while ! gosu postgres psql -c ""; do sleep 1; done; \
+  gosu postgres createuser app; \
+  gosu postgres createdb -O app app; \
+  gosu postgres pg_ctl stop
 
 # Update dotnet cache.
 USER app
@@ -47,11 +54,13 @@ COPY . /home/app
 # RUN git clean -ffdx
 RUN dotnet restore && dotnet build
 USER root
+
+# Initialize database.
 RUN set -e; \
   gosu postgres pg_ctl start; \
-  while ! gosu postgres createuser app; do sleep 1; done; \
-  gosu postgres createdb -O app app; \
-  gosu app psql -f init.sql; \
+  while ! gosu postgres psql -c ""; do sleep 1; done; \
+  gosu app dotnet ef migrations add InitialMigration; \
+  gosu app dotnet ef database update; \
   gosu postgres pg_ctl stop
 
 EXPOSE 5000

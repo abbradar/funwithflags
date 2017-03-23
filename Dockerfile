@@ -21,7 +21,9 @@ ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA /srv/postgresql
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA"
 USER postgres
-RUN initdb && sed -i 's/trust/ident/g' "$PGDATA/pg_hba.conf"
+RUN initdb
+# FIXME: Npgsql.EntityFrameworkcore.PostgreSQL has not yet been updated to support UNIX sockets.
+# RUN sed -i 's/trust/ident/g' "$PGDATA/pg_hba.conf"
 USER root
 
 # Install .NET Core

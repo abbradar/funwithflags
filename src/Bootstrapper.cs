@@ -14,6 +14,7 @@ namespace funwithflags
         // We get configuration from Startup class.
         public CustomBootstrapper(IConfiguration configuration)
         {
+            // Build database connection options.
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>()
                 .UseNpgsql(configuration["database"]);
             this.dbContextOptions = optionsBuilder.Options;
@@ -27,6 +28,7 @@ namespace funwithflags
             environment.Tracing(enabled: false, displayErrorTraces: true);
         }
         
+        // Called on each new request; registers needed objects.
         protected override void ConfigureRequestContainer(TinyIoCContainer container, NancyContext context)
         {
             base.ConfigureRequestContainer(container, context);

@@ -5,10 +5,7 @@
 @EndSection
 
 @Section['Content']
-    <!--
-    <p>Hello, Foo!</p>
     <p>Tests count: @Model.Count.</p>
-    -->
     <table>
         @Each.Entries
         <tr>

@@ -12,6 +12,7 @@ namespace funwithflags
                 {
                     dynamic model = new ExpandoObject();
                     model.Count = database.Tests.Count();
+                    model.Entries = database.Tests.ToArray();
                     return View["Index", model];
                 });
 

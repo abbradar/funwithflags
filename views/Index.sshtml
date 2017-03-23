@@ -5,6 +5,11 @@
 @EndSection
 
 @Section['Content']
+    <!--
     <p>Hello, Foo!</p>
     <p>Tests count: @Model.Count.</p>
+    -->
+    @Each.Entries
+        Hello @Current.Name, @Current.Count
+    @EndEach
 @EndSection

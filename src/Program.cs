@@ -4,7 +4,6 @@ namespace funwithflags
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Configuration.CommandLine;
     using Nancy.Owin;
 
     public class Program

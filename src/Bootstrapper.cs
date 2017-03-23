@@ -49,8 +49,7 @@ namespace funwithflags
             base.ConfigureRequestContainer(container, context);
 
             // Create new database context and make it available.
-            var dbcontext = new DatabaseContext(this.dbContextOptions);
-            container.Register<DatabaseContext>(dbcontext);
+            container.Register<DatabaseContext>().UsingConstructor(() => new DatabaseContext(this.dbContextOptions)).AsSingleton();
         }
     }
 }

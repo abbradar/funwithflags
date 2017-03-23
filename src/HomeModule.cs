@@ -1,6 +1,7 @@
 namespace funwithflags
 {
     using System.Linq;
+    using System.Dynamic;
     using Nancy;
 
     public class HomeModule : NancyModule
@@ -9,12 +10,14 @@ namespace funwithflags
         {
             Get("/", _ =>
                 {
-                    ViewBag.Count = database.Tests.Count();
-                    return View["Index"];
+                    dynamic model = new ExpandoObject();
+                    model.Count = database.Tests.Count();
+                    return View["Index", model];
                 });
-            Get("/products/{id}", _ =>
+
+            Get("/products/{id}", parameters =>
             {
-                return "Hello Bar";
+                return $"Hello Bar, id: {parameters.id}";
             });
         }
     }

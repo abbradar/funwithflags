@@ -6,5 +6,5 @@
 
 @Section['Content']
     <p>Hello, Foo!</p>
-    <p>Tests count: @ViewBag.Count.</p>
+    <p>Tests count: @Model.Count.</p>
 @EndSection

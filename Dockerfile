@@ -20,18 +20,16 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" > /etc/
 ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA /srv/postgresql
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA"
-USER postgres
-RUN initdb
+RUN gosu postgres initdb
 # FIXME: Npgsql.EntityFrameworkcore.PostgreSQL has not yet been updated to support UNIX sockets.
 # RUN sed -i 's/trust/ident/g' "$PGDATA/pg_hba.conf"
 ENV DATABASE Host=127.0.0.1;Username=app
-USER root
 
 # Install .NET Core
 RUN echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list \
   && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893 \
   && apt-get update \
-  && apt-get -y install dotnet-dev-1.0.0-preview2-1-003177
+  && apt-get -y install dotnet-dev-1.0.1
 
 # Create user
 RUN useradd -m -g users app
@@ -44,16 +42,16 @@ RUN set -e; \
   gosu postgres pg_ctl stop
 
 # Update dotnet cache.
-USER app
 WORKDIR /tmp
-RUN dotnet new
+RUN gosu app dotnet new -all
 
 # Set up application
 WORKDIR /home/app
 COPY . /home/app
+RUN chown -R app:users /home/app
 # RUN git clean -ffdx
-RUN dotnet restore && dotnet build
-USER root
+RUN gosu app dotnet restore; \
+  gosu app dotnet build
 
 # Initialize database.
 RUN set -e; \
